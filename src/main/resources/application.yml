@@ -1,0 +1,7 @@
+app:
+  port: 4000
+  datasource:
+    driver: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5454/imageboard_db
+    username: dnlkk
+    password: dnlkkpass
