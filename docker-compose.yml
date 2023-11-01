@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  imageboard-postgres:
+    image: library/postgres:14
+    restart: on-failure
+    environment:
+      POSTGRES_USER: ${POSTGRESQL_IMAGEBOARD_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_IMAGEBOARD_PASS}
+      POSTGRES_DB: ${POSTGRESQL_IMAGEBOARD_DB}
+    volumes:
+      - ./db/imageboard/data:/var/lib/postgresql/data
+      - ./db/imageboard/init:/docker-entrypoint-initdb.d
+      - ./db/imageboard/banners:/var/lib/docker/volumes/banners/
+    healthcheck:
+      test: pg_isready -d ${POSTGRESQL_IMAGEBOARD_DB} -U ${POSTGRESQL_IMAGEBOARD_USER}
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    ports:
+      - ${POSTGRESQL_IMAGEBOARD_PORT:-5454}:5432
+    deploy:
+      resources:
+        limits:
+          memory: 256M
