@@ -7,6 +7,7 @@ import com.dnlkk.dependency_injector.annotations.components.RestController;
 import com.dnlkk.doc.annotation.ApiOperation;
 import com.dnlkk.doc.annotation.Tag;
 import com.dnlkk.repository.Pageable;
+import org.dnlkk.controller.api.MessageControllerAPI;
 import org.dnlkk.dto.request.MessageCreateRequestDTO;
 import org.dnlkk.dto.response.AllMessageResponseDTO;
 import org.dnlkk.model.Message;
@@ -18,23 +19,23 @@ public class MessageController implements MessageControllerAPI {
     @AutoInject
     private MessageService messageService;
 
-    @Override
     @Get
     @RequestMapping("/msg/:id")
     @ApiOperation(
             name = "Get one message with id",
             response = Message.class
     )
+    @Override
     public ResponseEntity<Message> getMessage(@PathVar("id") Integer id) {
         return ResponseEntity.ok(messageService.getMessage(id));
     }
 
-    @Override
     @Get
     @RequestMapping("/msg")
     @ApiOperation(
             name = "Get messages page",
             response = AllMessageResponseDTO.class)
+    @Override
     public ResponseEntity<AllMessageResponseDTO> getAllMessages(
             @RequestParam("limit") Integer limit,
             @RequestParam("page") Integer page,
@@ -48,13 +49,12 @@ public class MessageController implements MessageControllerAPI {
         return ResponseEntity.ok(new AllMessageResponseDTO(messageService.getAllMessages(pageable)));
     }
 
-    @Override
     @Post
     @RequestMapping("/msg")
     @ApiOperation(
             name = "Add one new message",
             response = Message.class)
-
+    @Override
     public ResponseEntity<Message> postMessage(@RequestBody MessageCreateRequestDTO body) {
         return ResponseEntity.ok(messageService.postNewMessage(body));
     }
