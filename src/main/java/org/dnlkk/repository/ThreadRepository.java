@@ -7,4 +7,5 @@ import org.dnlkk.model.Thread;
 
 @Repository
 public interface ThreadRepository extends DnlkkRepository<Integer, Thread> {
+    Thread findByIdIgnoredMessagesAndBoard(Integer id);
 }

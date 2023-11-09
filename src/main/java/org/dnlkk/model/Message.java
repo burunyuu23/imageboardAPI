@@ -27,15 +27,18 @@ public class Message extends CreatedDate {
     @FK
     @OneToMany
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Attachment> attachments;
 
     @FK
     @OneToMany
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Reply> replies;
 
     @FK
     @OneToMany
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Reply> responses;
 }

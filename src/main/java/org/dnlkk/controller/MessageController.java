@@ -1,6 +1,8 @@
 package org.dnlkk.controller;
 
 import com.dnlkk.controller.annotations.*;
+import com.dnlkk.controller.annotations.request_method.Get;
+import com.dnlkk.controller.annotations.request_method.Post;
 import com.dnlkk.controller.responses.ResponseEntity;
 import com.dnlkk.dependency_injector.annotations.AutoInject;
 import com.dnlkk.dependency_injector.annotations.components.RestController;
@@ -20,7 +22,7 @@ public class MessageController implements MessageControllerAPI {
     private MessageService messageService;
 
     @Get
-    @RequestMapping("/msg/:id")
+    @RequestMapping("/:id")
     @ApiOperation(
             name = "Get one message with id",
             response = Message.class
@@ -31,29 +33,24 @@ public class MessageController implements MessageControllerAPI {
     }
 
     @Get
-    @RequestMapping("/msg")
+    @RequestMapping()
     @ApiOperation(
             name = "Get messages page",
-            response = AllMessageResponseDTO.class)
+            response = AllMessageResponseDTO.class
+    )
     @Override
     public ResponseEntity<AllMessageResponseDTO> getAllMessages(
-            @RequestParam("limit") Integer limit,
-            @RequestParam("page") Integer page,
-            @RequestParam("offset") Integer offset
+            @PageableParam Pageable pageable
     ) {
-        Pageable pageable = Pageable.builder()
-                .limit(limit != null ? limit : 10)
-                .page(page != null ? page : 0)
-                .offset(offset != null ? offset : 0)
-                .build();
-        return ResponseEntity.ok(new AllMessageResponseDTO(messageService.getAllMessages(pageable)));
+        return ResponseEntity.ok(new AllMessageResponseDTO(pageable, messageService.getAllMessages(pageable)));
     }
 
     @Post
-    @RequestMapping("/msg")
+    @RequestMapping()
     @ApiOperation(
             name = "Add one new message",
-            response = Message.class)
+            response = Message.class
+    )
     @Override
     public ResponseEntity<Message> postMessage(@RequestBody MessageCreateRequestDTO body) {
         return ResponseEntity.ok(messageService.postNewMessage(body));

@@ -7,10 +7,12 @@ import com.dnlkk.repository.annotations.entity.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @Table("attachment_table")
+@NoArgsConstructor
 public class Attachment {
     @PK
     @EqualsAndHashCode.Include
@@ -26,5 +28,10 @@ public class Attachment {
     @Column("attachment")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private byte[] attachment;
+    private byte[] file;
+
+    public Attachment(Message message, byte[] file) {
+        this.message = message;
+        this.file = file;
+    }
 }
