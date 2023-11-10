@@ -10,4 +10,5 @@ public interface BoardRepository extends DnlkkRepository<String, Board> {
 
     Board find(Pageable pageable);
     Board findByTheme(Integer themeId, Pageable pageable);
+    Board findByThemeIgnoredBannerAndThreads(Integer themeId, Pageable pageable);
 }

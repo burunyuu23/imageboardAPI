@@ -37,14 +37,21 @@ public class ThreadController implements ThreadControllerAPI {
             response = Thread.class
     )
     @Override
-    public ResponseEntity<Thread> getRandomThread(@RequestParam("boardId") String boardId) {
+    public ResponseEntity<Thread> getRandomThread(
+            @RequestParam("board") String boardId,
+            @RequestParam("theme") Integer themeId
+    ) {
         Pageable pageable = Pageable.builder()
                 .limit(1)
                 .sort(new Sort[]{new Sort("random()")})
                 .build();
-        if (boardId == null)
-            return ResponseEntity.ok(threadService.getRandomThread(pageable));
-        else
+
+        if (boardId != null)
             return ResponseEntity.ok(threadService.getRandomThreadByBoardId(pageable, boardId));
+        else if (themeId != null)
+            return ResponseEntity.ok(threadService.getRandomThreadByTheme(pageable, themeId));
+        else
+            return ResponseEntity.ok(threadService.getRandomThread(pageable));
+
     }
 }
