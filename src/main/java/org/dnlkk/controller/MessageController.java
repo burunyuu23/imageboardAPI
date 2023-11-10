@@ -9,6 +9,7 @@ import com.dnlkk.dependency_injector.annotations.components.RestController;
 import com.dnlkk.doc.annotation.ApiOperation;
 import com.dnlkk.doc.annotation.Tag;
 import com.dnlkk.repository.Pageable;
+import com.dnlkk.repository.Sort;
 import org.dnlkk.controller.api.MessageControllerAPI;
 import org.dnlkk.dto.request.MessageCreateRequestDTO;
 import org.dnlkk.dto.response.AllMessageResponseDTO;
@@ -30,6 +31,33 @@ public class MessageController implements MessageControllerAPI {
     @Override
     public ResponseEntity<Message> getMessage(@PathVar("id") Integer id) {
         return ResponseEntity.ok(messageService.getMessage(id));
+    }
+
+    @Get
+    @RequestMapping("/rand")
+    @ApiOperation(
+            name = "Get one message with id",
+            response = Message.class
+    )
+    @Override
+    public ResponseEntity<Message> getRandomMessage(
+            @RequestParam("thread") Integer threadId,
+            @RequestParam("board") String boardId,
+            @RequestParam("theme") Integer themeId
+    ) {
+        Pageable pageable = Pageable.builder()
+                .limit(1)
+                .sort(new Sort[]{new Sort("random()")})
+                .build();
+        if (threadId != null)
+            return ResponseEntity.ok(messageService.getRandomMessageByThreadId(pageable, threadId));
+        else if (boardId != null)
+            return ResponseEntity.ok(messageService.getRandomMessageByBoardId(pageable, boardId));
+        else if (themeId != null)
+            return ResponseEntity.ok(messageService.getRandomMessageByThemeId(pageable, themeId));
+        else
+            return ResponseEntity.ok(messageService.getRandomMessage(pageable));
+
     }
 
     @Get

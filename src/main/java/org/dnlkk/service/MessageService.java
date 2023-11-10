@@ -4,14 +4,9 @@ import com.dnlkk.dependency_injector.annotations.AutoInject;
 import com.dnlkk.dependency_injector.annotations.components.Service;
 import com.dnlkk.repository.Pageable;
 import org.dnlkk.dto.request.MessageCreateRequestDTO;
-import org.dnlkk.model.Attachment;
-import org.dnlkk.model.Message;
-import org.dnlkk.model.Reply;
+import org.dnlkk.model.*;
 import org.dnlkk.model.Thread;
-import org.dnlkk.repository.AttachmentRepository;
-import org.dnlkk.repository.MessageRepository;
-import org.dnlkk.repository.ReplyRepository;
-import org.dnlkk.repository.ThreadRepository;
+import org.dnlkk.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +21,32 @@ public class MessageService {
     @AutoInject
     private ThreadRepository threadRepository;
     @AutoInject
+    private BoardRepository boardRepository;
+    @AutoInject
     private AttachmentRepository attachmentRepository;
     @AutoInject
     private ReplyRepository replyRepository;
 
     public Message getMessage(Integer id) {
         return messageRepository.findById(id);
+    }
+    public Message getRandomMessage(Pageable pageable) {
+        return messageRepository.find(pageable);
+    }
+
+    public Message getRandomMessageByThreadId(Pageable pageable, Integer threadId) {
+        return messageRepository.findByThread(threadId, pageable);
+    }
+
+    public Message getRandomMessageByBoardId(Pageable pageable, String boardId) {
+        Thread thread = threadRepository.findByBoardIgnoredBoardAndMessages(boardId, pageable);
+        return getRandomMessageByThreadId(pageable, thread.getId());
+    }
+
+    public Message getRandomMessageByThemeId(Pageable pageable, Integer themeId) {
+        Board board = boardRepository.findByThemeIgnoredBannerAndThreads(themeId, pageable);
+        Thread thread = threadRepository.findByBoardIgnoredBoardAndMessages(board.getId(), pageable);
+        return getRandomMessageByThreadId(pageable, thread.getId());
     }
 
     public Message postNewMessage(MessageCreateRequestDTO messageCreateRequestDTO) {
@@ -74,8 +89,6 @@ public class MessageService {
             Integer replyTo = Integer.parseInt(replyString.substring(2).trim());
             Message toMessage = new Message();
             toMessage.setId(replyTo);
-            if (toMessage == null)
-                continue;
 
             Reply reply = new Reply(toMessage, fromMessage);
             replies.add(reply);
@@ -84,8 +97,6 @@ public class MessageService {
     }
 
     public List<Message> getAllMessages(Pageable pageable) {
-        System.out.println(messageRepository.countByThread(1));
-        System.out.println(messageRepository.countByThread(2));
         return messageRepository.findAll(pageable);
     }
 
