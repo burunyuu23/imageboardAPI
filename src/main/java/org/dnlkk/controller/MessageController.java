@@ -40,15 +40,24 @@ public class MessageController implements MessageControllerAPI {
             response = Message.class
     )
     @Override
-    public ResponseEntity<Message> getRandomMessage(@RequestParam("thread") Integer threadId) {
+    public ResponseEntity<Message> getRandomMessage(
+            @RequestParam("thread") Integer threadId,
+            @RequestParam("board") String boardId,
+            @RequestParam("theme") Integer themeId
+    ) {
         Pageable pageable = Pageable.builder()
                 .limit(1)
                 .sort(new Sort[]{new Sort("random()")})
                 .build();
-        if (threadId == null)
-            return ResponseEntity.ok(messageService.getRandomMessage(pageable));
-        else
+        if (threadId != null)
             return ResponseEntity.ok(messageService.getRandomMessageByThreadId(pageable, threadId));
+        else if (boardId != null)
+            return ResponseEntity.ok(messageService.getRandomMessageByBoardId(pageable, boardId));
+        else if (themeId != null)
+            return ResponseEntity.ok(messageService.getRandomMessageByThemeId(pageable, themeId));
+        else
+            return ResponseEntity.ok(messageService.getRandomMessage(pageable));
+
     }
 
     @Get
