@@ -10,6 +10,7 @@ import org.dnlkk.model.Message;
 public interface MessageControllerAPI {
 
     ResponseEntity<Message> getMessage(@PathVar("id") Integer id);
+    ResponseEntity<Message> getRandomMessage(@RequestParam("thread") Integer threadId);
 
     ResponseEntity<AllMessageResponseDTO> getAllMessages(@PageableParam Pageable pageable);
 

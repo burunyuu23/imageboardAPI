@@ -34,6 +34,13 @@ public class MessageService {
         return messageRepository.findById(id);
     }
 
+    public Message getRandomMessageByThreadId(Pageable pageable, Integer threadId) {
+        return messageRepository.findByThread(threadId, pageable);
+    }
+    public Message getRandomMessage(Pageable pageable) {
+        return messageRepository.find(pageable);
+    }
+
     public Message postNewMessage(MessageCreateRequestDTO messageCreateRequestDTO) {
         List<Attachment> attachments = new ArrayList<>();
 
@@ -74,8 +81,6 @@ public class MessageService {
             Integer replyTo = Integer.parseInt(replyString.substring(2).trim());
             Message toMessage = new Message();
             toMessage.setId(replyTo);
-            if (toMessage == null)
-                continue;
 
             Reply reply = new Reply(toMessage, fromMessage);
             replies.add(reply);
@@ -84,8 +89,6 @@ public class MessageService {
     }
 
     public List<Message> getAllMessages(Pageable pageable) {
-        System.out.println(messageRepository.countByThread(1));
-        System.out.println(messageRepository.countByThread(2));
         return messageRepository.findAll(pageable);
     }
 
