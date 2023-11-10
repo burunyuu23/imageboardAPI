@@ -6,4 +6,5 @@ import org.dnlkk.model.Thread;
 
 public interface ThreadControllerAPI {
     ResponseEntity<Thread> getThread(@RequestParam("id") Integer id);
+    ResponseEntity<Thread> getRandomThread(@RequestParam("boardId") String boardId);
 }
