@@ -18,5 +18,5 @@ public interface MessageControllerAPI {
 
     ResponseEntity<AllMessageResponseDTO> getAllMessages(@PageableParam Pageable pageable);
 
-    ResponseEntity<Message> postMessage(@RequestBody MessageCreateRequestDTO body);
+    ResponseEntity<?> postMessage(@RequestBody MessageCreateRequestDTO body);
 }
