@@ -9,6 +9,7 @@ import org.dnlkk.model.Board;
 public interface BoardRepository extends DnlkkRepository<String, Board> {
 
     Board find(Pageable pageable);
+    Board findByIdIgnoredBannerAndThreads(String id);
     Board findByTheme(Integer themeId, Pageable pageable);
     Board findByThemeIgnoredBannerAndThreads(Integer themeId, Pageable pageable);
 }
