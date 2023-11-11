@@ -1,9 +1,12 @@
 package org.dnlkk.controller;
 
 import com.dnlkk.controller.annotations.PathVar;
+import com.dnlkk.controller.annotations.RequestBody;
 import com.dnlkk.controller.annotations.RequestMapping;
 import com.dnlkk.controller.annotations.RequestParam;
 import com.dnlkk.controller.annotations.request_method.Get;
+import com.dnlkk.controller.annotations.request_method.Post;
+import com.dnlkk.controller.http.HttpStatus;
 import com.dnlkk.controller.responses.ResponseEntity;
 import com.dnlkk.dependency_injector.annotations.AutoInject;
 import com.dnlkk.dependency_injector.annotations.components.RestController;
@@ -11,13 +14,20 @@ import com.dnlkk.doc.annotation.ApiOperation;
 import com.dnlkk.repository.Pageable;
 import com.dnlkk.repository.Sort;
 import org.dnlkk.controller.api.ThreadControllerAPI;
+import org.dnlkk.dto.request.ThreadCreateRequestDTO;
+import org.dnlkk.model.Message;
 import org.dnlkk.model.Thread;
+import org.dnlkk.service.MessageService;
 import org.dnlkk.service.ThreadService;
+
+import java.util.List;
 
 @RestController("/thread")
 public class ThreadController implements ThreadControllerAPI {
     @AutoInject
     private ThreadService threadService;
+    @AutoInject
+    private MessageService messageService;
 
     @Get
     @RequestMapping("/:id")
@@ -53,5 +63,20 @@ public class ThreadController implements ThreadControllerAPI {
         else
             return ResponseEntity.ok(threadService.getRandomThread(pageable));
 
+    }
+
+    @Post
+    @RequestMapping()
+    @ApiOperation(
+            name = "Create thread and main message",
+            response = Thread.class
+    )
+    @Override
+    public ResponseEntity<?> postThread(@RequestBody ThreadCreateRequestDTO threadCreateRequestDTO) {
+        Thread thread = threadService.postNewThread(threadCreateRequestDTO);
+        threadCreateRequestDTO.getMainMessage().setThreadId(thread.getId());
+        Message message = messageService.postNewMessage(threadCreateRequestDTO.getMainMessage());
+        thread.setMessages(List.of(message));
+        return new ResponseEntity<>(thread, HttpStatus.CREATED);
     }
 }
