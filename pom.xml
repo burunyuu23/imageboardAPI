@@ -24,7 +24,7 @@
     <dependency>
       <groupId>ru.dnlkk</groupId>
       <artifactId>DnlkkJ</artifactId>
-      <version>0.3.3-2</version>
+      <version>0.3.4</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
     <dependency>
