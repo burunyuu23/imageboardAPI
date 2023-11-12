@@ -29,16 +29,16 @@ public class ThreadService {
     public List<ThreadDTO> getThreads(Pageable pageable) {
         List<Thread> threadList = threadRepository.findAllOnlyIgnoredBoard(pageable);
         List<ThreadDTO> dtoList = new ArrayList<>();
-        for (Thread thread : threadList)
+        for (Thread thread : threadList) {
             dtoList.add(new ThreadDTO(
                     thread,
                     messageRepository.countByThread(thread.getId()),
-//                    messageRepository.countByToday(thread.getId())
                     messageRepository.countByThreadAndGtCreatedInterval(
                             thread.getId(),
                             new Interval(1, Interval.IntervalDate.DAY)
                     )
             ));
+        }
         return dtoList;
     }
 
