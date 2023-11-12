@@ -3,12 +3,14 @@ package org.dnlkk.model;
 import com.dnlkk.repository.annotations.entity.*;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.*;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Table("message_table")
-public class Message extends CreatedDate {
+public class Message {
     @PK
     @EqualsAndHashCode.Include
     private Integer id;
@@ -23,6 +25,9 @@ public class Message extends CreatedDate {
 
     @Column("body")
     private String body;
+
+    @Column("created_date")
+    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
 
     @FK
     @OneToMany

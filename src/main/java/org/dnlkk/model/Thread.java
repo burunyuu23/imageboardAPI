@@ -11,10 +11,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Table("thread_table")
-public class Thread extends CreatedDate {
+public class Thread {
     @PK
     private Integer id;
 
@@ -29,7 +28,7 @@ public class Thread extends CreatedDate {
     private String name;
 
     @Column("created_date")
-    private Timestamp createdDate;
+    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
 
     @FK
     @OneToMany

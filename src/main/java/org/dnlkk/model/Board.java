@@ -9,10 +9,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Table("board_table")
-public class Board extends CreatedDate {
+public class Board {
     @PK
     private String id;
 
@@ -28,6 +27,9 @@ public class Board extends CreatedDate {
     @Column("description")
     private String description;
 
+    @Column("created_date")
+    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
+
     @FK
     @ManyToOne("boards")
     @Column("theme_id")
@@ -35,7 +37,4 @@ public class Board extends CreatedDate {
 
     @Column("banner")
     private byte[] banner;
-
-    @Column("created_date")
-    private Timestamp createdDate;
 }
