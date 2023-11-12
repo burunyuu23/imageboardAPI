@@ -1,6 +1,6 @@
 package org.dnlkk.dto.response;
 
-import com.dnlkk.repository.Pageable;
+import com.dnlkk.repository.helper.Pageable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

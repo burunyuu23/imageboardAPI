@@ -2,7 +2,7 @@ package org.dnlkk.controller.api;
 
 import com.dnlkk.controller.annotations.*;
 import com.dnlkk.controller.responses.ResponseEntity;
-import com.dnlkk.repository.Pageable;
+import com.dnlkk.repository.helper.Pageable;
 import org.dnlkk.dto.request.MessageCreateRequestDTO;
 import org.dnlkk.dto.response.AllMessageResponseDTO;
 import org.dnlkk.model.Message;

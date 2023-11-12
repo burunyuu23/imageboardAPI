@@ -8,8 +8,8 @@ import com.dnlkk.controller.responses.ResponseEntity;
 import com.dnlkk.dependency_injector.annotations.AutoInject;
 import com.dnlkk.dependency_injector.annotations.components.RestController;
 import com.dnlkk.doc.annotation.ApiOperation;
-import com.dnlkk.repository.Pageable;
-import com.dnlkk.repository.Sort;
+import com.dnlkk.repository.helper.Pageable;
+import com.dnlkk.repository.helper.Sort;
 import org.dnlkk.controller.api.ThreadControllerAPI;
 import org.dnlkk.dto.request.ThreadCreateRequestDTO;
 import org.dnlkk.dto.response.AllThreadResponseDTO;
@@ -37,7 +37,7 @@ public class ThreadController implements ThreadControllerAPI {
     public ResponseEntity<AllThreadResponseDTO> getThreads(
             @PageableParam Pageable pageable
     ) {
-        pageable.setSort(new Sort[]{ new Sort("id"), new Sort("message_tableid")});
+        pageable.setSort(new Sort[]{ new Sort("id"), new Sort("message_table_id")});
         return ResponseEntity.ok(
                 new AllThreadResponseDTO(threadService.getThreads(pageable), pageable)
         );

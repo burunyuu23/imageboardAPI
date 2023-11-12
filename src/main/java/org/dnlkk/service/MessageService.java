@@ -2,7 +2,7 @@ package org.dnlkk.service;
 
 import com.dnlkk.dependency_injector.annotations.AutoInject;
 import com.dnlkk.dependency_injector.annotations.components.Service;
-import com.dnlkk.repository.Pageable;
+import com.dnlkk.repository.helper.Pageable;
 import org.dnlkk.dto.request.MessageCreateRequestDTO;
 import org.dnlkk.model.*;
 import org.dnlkk.model.Thread;
