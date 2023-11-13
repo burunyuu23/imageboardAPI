@@ -26,20 +26,8 @@ public class ThreadService {
     @AutoInject
     private BoardRepository boardRepository;
 
-    public List<ThreadDTO> getThreads(Pageable pageable) {
-        List<Thread> threadList = threadRepository.findAllOnlyIgnoredBoard(pageable);
-        List<ThreadDTO> dtoList = new ArrayList<>();
-        for (Thread thread : threadList) {
-            dtoList.add(new ThreadDTO(
-                    thread,
-                    messageRepository.countByThread(thread.getId()),
-                    messageRepository.countByThreadAndGtCreatedInterval(
-                            thread.getId(),
-                            new Interval(1, Interval.IntervalDate.DAY)
-                    )
-            ));
-        }
-        return dtoList;
+    public List<Thread> getThreads(Pageable pageable) {
+        return threadRepository.findAllOnlyIgnoredBoard(pageable);
     }
 
 

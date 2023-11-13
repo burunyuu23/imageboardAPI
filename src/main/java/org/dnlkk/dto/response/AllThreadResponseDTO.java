@@ -4,7 +4,7 @@ import com.dnlkk.repository.helper.Pageable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.dnlkk.dto.ThreadDTO;
+import org.dnlkk.model.Thread;
 
 import java.util.List;
 
@@ -12,6 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AllThreadResponseDTO {
-    private List<ThreadDTO> threadList;
+    private List<Thread> threadList;
     private Pageable pageable;
 }
