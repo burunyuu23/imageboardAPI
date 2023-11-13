@@ -35,6 +35,7 @@ public class ThreadController implements ThreadControllerAPI {
     )
     @Override
     public ResponseEntity<AllThreadResponseDTO> getThreads(
+            @RequestParam("board") String boardId,
             @PageableParam Pageable pageable
     ) {
         if (pageable.getSort() == null)
@@ -42,7 +43,10 @@ public class ThreadController implements ThreadControllerAPI {
                     new Sort("id", Sort.SortHow.DESC)
             });
         return ResponseEntity.ok(
-                new AllThreadResponseDTO(threadService.getThreads(pageable), pageable)
+                new AllThreadResponseDTO(
+                        threadService.getThreads(boardId, pageable),
+                        pageable
+                )
         );
     }
 
