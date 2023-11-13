@@ -68,9 +68,10 @@ public class MessageController implements MessageControllerAPI {
     )
     @Override
     public ResponseEntity<AllMessageResponseDTO> getAllMessages(
+            @RequestParam("thread") Integer threadId,
             @PageableParam Pageable pageable
     ) {
-        return ResponseEntity.ok(new AllMessageResponseDTO(pageable, messageService.getAllMessages(pageable)));
+        return ResponseEntity.ok(new AllMessageResponseDTO(pageable, messageService.getAllMessages(threadId, pageable)));
     }
 
     @Post

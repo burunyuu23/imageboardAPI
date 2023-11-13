@@ -16,7 +16,10 @@ public interface MessageControllerAPI {
             @RequestParam("theme") Integer themeId
     );
 
-    ResponseEntity<AllMessageResponseDTO> getAllMessages(@PageableParam Pageable pageable);
+    ResponseEntity<AllMessageResponseDTO> getAllMessages(
+            @RequestParam("thread") Integer threadId,
+            @PageableParam Pageable pageable
+    );
 
     ResponseEntity<?> postMessage(@RequestBody MessageCreateRequestDTO body);
 }
