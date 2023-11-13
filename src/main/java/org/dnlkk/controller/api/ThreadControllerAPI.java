@@ -11,9 +11,14 @@ import org.dnlkk.model.Thread;
 
 public interface ThreadControllerAPI {
 
-    ResponseEntity<AllThreadResponseDTO> getThreads(@PageableParam Pageable pageable);
+    ResponseEntity<AllThreadResponseDTO> getThreads(
+            @RequestParam("boardId") String boardId,
+            @PageableParam Pageable pageable
+    );
 
-    ResponseEntity<Thread> getThread(@RequestParam("id") Integer id);
+    ResponseEntity<Thread> getThread(
+            @RequestParam("id") Integer id
+    );
 
     ResponseEntity<Thread> getRandomThread(
             @RequestParam("boardId") String boardId,

@@ -26,8 +26,10 @@ public class ThreadService {
     @AutoInject
     private BoardRepository boardRepository;
 
-    public List<Thread> getThreads(Pageable pageable) {
-        return threadRepository.findAllOnlyIgnoredBoard(pageable);
+    public List<Thread> getThreads(String boardId, Pageable pageable) {
+        if (boardId == null)
+            return threadRepository.findAllOnlyIgnoredBoard(pageable);
+        return threadRepository.findByBoardOnlyIgnoredBoard(boardId, pageable);
     }
 
 

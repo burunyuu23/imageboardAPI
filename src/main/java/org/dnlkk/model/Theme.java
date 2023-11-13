@@ -14,7 +14,6 @@ import java.util.List;
 public class Theme {
     @PK
     private Integer id;
-
     private String name;
     private String description;
 
@@ -22,6 +21,6 @@ public class Theme {
     @OneToMany
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @JsonIncludeProperties({ "id" })
+    @JsonIncludeProperties({ "id", "name", "description", "banner" })
     private List<Board> boards;
 }

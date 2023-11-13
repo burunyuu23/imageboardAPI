@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface ThreadRepository extends DnlkkRepository<Integer, Thread> {
     List<Thread> findAll(Pageable pageable);
+    List<Thread> findByBoardOnlyIgnoredBoard(String boardId, Pageable pageable);
     List<Thread> findAllOnlyIgnoredBoard(Pageable pageable);
     Long countById(Integer id);
 
