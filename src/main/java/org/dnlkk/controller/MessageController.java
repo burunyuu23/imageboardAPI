@@ -36,7 +36,7 @@ public class MessageController implements MessageControllerAPI {
     @Get
     @RequestMapping("/rand")
     @ApiOperation(
-            name = "Get one message with id",
+            name = "Get random message from all/theme/board/thread",
             response = Message.class
     )
     @Override

@@ -1,5 +1,6 @@
 package org.dnlkk.controller;
 
+import com.dnlkk.controller.annotations.PathVar;
 import com.dnlkk.controller.annotations.RequestMapping;
 import com.dnlkk.controller.annotations.RequestParam;
 import com.dnlkk.controller.annotations.request_method.Get;
@@ -20,18 +21,18 @@ public class BoardController implements BoardControllerAPI {
     private BoardService boardService;
 
     @Get
-    @RequestMapping()
+    @RequestMapping("/:id")
     @ApiOperation(
             name = "Get board by id",
             response = AllMessageResponseDTO.class
     )
     @Override
-    public ResponseEntity<Board> getBoard(String id) {
+    public ResponseEntity<Board> getBoard(@PathVar("id") String id) {
         return ResponseEntity.ok(boardService.getBoard(id));
     }
 
     @Get
-    @RequestMapping("/rand")
+    @RequestMapping("/rand/random")
     @ApiOperation(
             name = "Get random board from all/one theme",
             response = AllMessageResponseDTO.class
