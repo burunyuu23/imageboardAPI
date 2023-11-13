@@ -35,4 +35,21 @@ public class Thread {
     @EqualsAndHashCode.Exclude
     @JsonIncludeProperties({ "id" })
     private List<Message> messages;
+
+    @With("""
+            COUNT(message_table.id)
+            OVER (PARTITION BY thread_table.id)
+            """)
+    @Column("count_all")
+    private Long countAll;
+
+    @With("""
+            COUNT(
+                CASE WHEN message_table.created_date >= (CURRENT_TIMESTAMP - INTERVAL '26 hour')
+                THEN message_table.id END
+                )
+            OVER (PARTITION BY thread_table.id)
+            """)
+    @Column("count_today")
+    private Long countToday;
 }
