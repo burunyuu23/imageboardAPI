@@ -1,7 +1,7 @@
 package org.dnlkk.service;
 
 import com.dnlkk.dependency_injector.annotations.AutoInject;
-import com.dnlkk.repository.Pageable;
+import com.dnlkk.repository.helper.Pageable;
 import org.dnlkk.model.Board;
 import org.dnlkk.repository.BoardRepository;
 

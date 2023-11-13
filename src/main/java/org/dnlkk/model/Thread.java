@@ -11,10 +11,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Table("thread_table")
-public class Thread extends CreatedDate {
+public class Thread {
     @PK
     private Integer id;
 
@@ -29,11 +28,28 @@ public class Thread extends CreatedDate {
     private String name;
 
     @Column("created_date")
-    private Timestamp createdDate;
+    private Timestamp createdDate = Timestamp.valueOf(LocalDateTime.now());
 
     @FK
     @OneToMany
     @EqualsAndHashCode.Exclude
     @JsonIncludeProperties({ "id" })
     private List<Message> messages;
+
+    @With("""
+            COUNT(message_table.id)
+            OVER (PARTITION BY thread_table.id)
+            """)
+    @Column("count_all")
+    private Long countAll;
+
+    @With("""
+            COUNT(
+                CASE WHEN message_table.created_date >= (CURRENT_TIMESTAMP - INTERVAL '26 hour')
+                THEN message_table.id END
+                )
+            OVER (PARTITION BY thread_table.id)
+            """)
+    @Column("count_today")
+    private Long countToday;
 }

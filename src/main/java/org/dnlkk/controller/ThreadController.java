@@ -1,9 +1,6 @@
 package org.dnlkk.controller;
 
-import com.dnlkk.controller.annotations.PathVar;
-import com.dnlkk.controller.annotations.RequestBody;
-import com.dnlkk.controller.annotations.RequestMapping;
-import com.dnlkk.controller.annotations.RequestParam;
+import com.dnlkk.controller.annotations.*;
 import com.dnlkk.controller.annotations.request_method.Get;
 import com.dnlkk.controller.annotations.request_method.Post;
 import com.dnlkk.controller.http.HttpStatus;
@@ -11,10 +8,11 @@ import com.dnlkk.controller.responses.ResponseEntity;
 import com.dnlkk.dependency_injector.annotations.AutoInject;
 import com.dnlkk.dependency_injector.annotations.components.RestController;
 import com.dnlkk.doc.annotation.ApiOperation;
-import com.dnlkk.repository.Pageable;
-import com.dnlkk.repository.Sort;
+import com.dnlkk.repository.helper.Pageable;
+import com.dnlkk.repository.helper.Sort;
 import org.dnlkk.controller.api.ThreadControllerAPI;
 import org.dnlkk.dto.request.ThreadCreateRequestDTO;
+import org.dnlkk.dto.response.AllThreadResponseDTO;
 import org.dnlkk.model.Message;
 import org.dnlkk.model.Thread;
 import org.dnlkk.service.MessageService;
@@ -30,13 +28,34 @@ public class ThreadController implements ThreadControllerAPI {
     private MessageService messageService;
 
     @Get
+    @RequestMapping()
+    @ApiOperation(
+            name = "Get threads",
+            response = AllThreadResponseDTO.class
+    )
+    @Override
+    public ResponseEntity<AllThreadResponseDTO> getThreads(
+            @PageableParam Pageable pageable
+    ) {
+        if (pageable.getSort() == null)
+            pageable.setSort(new Sort[]{
+                    new Sort("id", Sort.SortHow.DESC)
+            });
+        return ResponseEntity.ok(
+                new AllThreadResponseDTO(threadService.getThreads(pageable), pageable)
+        );
+    }
+
+    @Get
     @RequestMapping("/:id")
     @ApiOperation(
             name = "Get thread",
             response = Thread.class
     )
     @Override
-    public ResponseEntity<Thread> getThread(@PathVar("id") Integer id) {
+    public ResponseEntity<Thread> getThread(
+            @PathVar("id") Integer id
+    ) {
         return ResponseEntity.ok(threadService.getThread(id));
     }
 
@@ -72,7 +91,7 @@ public class ThreadController implements ThreadControllerAPI {
             response = Thread.class
     )
     @Override
-    public ResponseEntity<?> postThread(@RequestBody ThreadCreateRequestDTO threadCreateRequestDTO) {
+    public ResponseEntity<Thread> postThread(@RequestBody ThreadCreateRequestDTO threadCreateRequestDTO) {
         Thread thread = threadService.postNewThread(threadCreateRequestDTO);
         threadCreateRequestDTO.getMainMessage().setThreadId(thread.getId());
         Message message = messageService.postNewMessage(threadCreateRequestDTO.getMainMessage());
