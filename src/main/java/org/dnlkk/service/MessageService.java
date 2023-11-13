@@ -35,7 +35,7 @@ public class MessageService {
     }
 
     public Message getRandomMessageByThreadId(Pageable pageable, Integer threadId) {
-        return messageRepository.findByThread(threadId, pageable);
+        return messageRepository.findByThread(threadId, pageable).get(0);
     }
 
     public Message getRandomMessageByBoardId(Pageable pageable, String boardId) {
@@ -96,7 +96,9 @@ public class MessageService {
         return replies;
     }
 
-    public List<Message> getAllMessages(Pageable pageable) {
+    public List<Message> getAllMessages(Integer threadId, Pageable pageable) {
+        if (threadId != null)
+            return messageRepository.findByThread(threadId, pageable);
         return messageRepository.findAll(pageable);
     }
 

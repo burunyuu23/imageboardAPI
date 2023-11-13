@@ -21,5 +21,5 @@ public interface MessageRepository extends DnlkkRepository<Integer, Message> {
     Long countByToday(@Param("thread") Integer threadId);
     Long countByThreadAndGtCreatedInterval(Integer threadId, Interval interval);
     Message find(Pageable pageable);
-    Message findByThread(Integer threadId, Pageable pageable);
+    List<Message> findByThread(Integer threadId, Pageable pageable);
 }
