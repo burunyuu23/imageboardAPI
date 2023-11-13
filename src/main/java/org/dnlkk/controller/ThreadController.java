@@ -37,11 +37,10 @@ public class ThreadController implements ThreadControllerAPI {
     public ResponseEntity<AllThreadResponseDTO> getThreads(
             @PageableParam Pageable pageable
     ) {
-        pageable.setSort(new Sort[]{
-                new Sort("count_today", Sort.SortHow.DESC),
-                new Sort("id"),
-                new Sort("message_table_id")
-        });
+        if (pageable.getSort() == null)
+            pageable.setSort(new Sort[]{
+                    new Sort("id", Sort.SortHow.DESC)
+            });
         return ResponseEntity.ok(
                 new AllThreadResponseDTO(threadService.getThreads(pageable), pageable)
         );
