@@ -5,11 +5,15 @@ import com.dnlkk.repository.DnlkkRepository;
 import com.dnlkk.repository.helper.Pageable;
 import org.dnlkk.model.Board;
 
+import java.util.List;
+
 @Repository
 public interface BoardRepository extends DnlkkRepository<String, Board> {
 
     Board find(Pageable pageable);
-    Board findByIdIgnoredBannerAndThreads(String id);
+
+    List<Board> findAllIgnoredBannerAndThreads();
+    Board findByIdIgnoredThreads(String id);
     Board findByTheme(Integer themeId, Pageable pageable);
     Board findByThemeIgnoredBannerAndThreads(Integer themeId, Pageable pageable);
 }

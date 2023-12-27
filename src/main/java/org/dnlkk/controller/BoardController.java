@@ -15,10 +15,23 @@ import org.dnlkk.dto.response.AllMessageResponseDTO;
 import org.dnlkk.model.Board;
 import org.dnlkk.service.BoardService;
 
+import java.util.List;
+
 @RestController("/board")
 public class BoardController implements BoardControllerAPI {
     @AutoInject
     private BoardService boardService;
+
+    @Get
+    @RequestMapping()
+    @ApiOperation(
+            name = "Get all boards",
+            response = AllMessageResponseDTO.class
+    )
+    @Override
+    public ResponseEntity<List<Board>> getBoards() {
+        return ResponseEntity.ok(boardService.getBoards());
+    }
 
     @Get
     @RequestMapping("/:id")

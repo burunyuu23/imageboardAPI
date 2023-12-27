@@ -21,6 +21,6 @@ public class Theme {
     @OneToMany
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @JsonIncludeProperties({ "id", "name", "description", "banner" })
+    @JsonIncludeProperties({ "id", "name", "description", "banner", "allMessages", "todayMessages" })
     private List<Board> boards;
 }

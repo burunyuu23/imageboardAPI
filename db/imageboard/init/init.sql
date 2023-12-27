@@ -56,8 +56,12 @@ drop table if exists attachment_table CASCADE;
 CREATE TABLE IF NOT EXISTS attachment_table
 (
     id int PRIMARY KEY generated always as identity,
-    msg_id int NOT NULL,
+    msg_id int NULL,
     attachment bytea NOT NULL,
 
     FOREIGN KEY (msg_id) REFERENCES message_table(id) ON DELETE CASCADE
 );
+
+alter table attachment_table
+alter column msg_id
+    DROP NOT NULL;

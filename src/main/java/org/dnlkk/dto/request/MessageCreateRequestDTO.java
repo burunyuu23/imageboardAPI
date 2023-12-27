@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class MessageCreateRequestDTO {
     String body;
-    byte[][] attachments;
+    Integer[] attachmentIds;
     Integer threadId;
 }

@@ -45,7 +45,7 @@ public class Thread {
 
     @With("""
             COUNT(
-                CASE WHEN message_table.created_date >= (CURRENT_TIMESTAMP - INTERVAL '26 hour')
+                CASE WHEN message_table.created_date >= (CURRENT_TIMESTAMP - INTERVAL '24 hour')
                 THEN message_table.id END
                 )
             OVER (PARTITION BY thread_table.id)

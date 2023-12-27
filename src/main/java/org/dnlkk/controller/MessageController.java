@@ -11,10 +11,13 @@ import com.dnlkk.doc.annotation.Tag;
 import com.dnlkk.repository.helper.Pageable;
 import com.dnlkk.repository.helper.Sort;
 import org.dnlkk.controller.api.MessageControllerAPI;
+import org.dnlkk.dto.MessageDTO;
 import org.dnlkk.dto.request.MessageCreateRequestDTO;
 import org.dnlkk.dto.response.AllMessageResponseDTO;
 import org.dnlkk.model.Message;
 import org.dnlkk.service.MessageService;
+
+import java.util.List;
 
 @RestController("/message")
 @Tag(name = "Message", description = "Work with messages")
@@ -29,8 +32,13 @@ public class MessageController implements MessageControllerAPI {
             response = Message.class
     )
     @Override
-    public ResponseEntity<Message> getMessage(@PathVar("id") Integer id) {
-        return ResponseEntity.ok(messageService.getMessage(id));
+    public ResponseEntity<MessageDTO> getMessage(@PathVar("id") Integer id) {
+        Pageable pageable = Pageable.builder()
+                .limit(1)
+                .build();
+        return ResponseEntity.ok(
+                new MessageDTO(messageService.getMessage(id, pageable), messageService.getMessagePosition(id))
+        );
     }
 
     @Get
@@ -40,7 +48,7 @@ public class MessageController implements MessageControllerAPI {
             response = Message.class
     )
     @Override
-    public ResponseEntity<Message> getRandomMessage(
+    public ResponseEntity<MessageDTO> getRandomMessage(
             @RequestParam("thread") Integer threadId,
             @RequestParam("board") String boardId,
             @RequestParam("theme") Integer themeId
@@ -49,15 +57,32 @@ public class MessageController implements MessageControllerAPI {
                 .limit(1)
                 .sort(new Sort[]{new Sort("random()")})
                 .build();
+        Message message = null;
         if (threadId != null)
-            return ResponseEntity.ok(messageService.getRandomMessageByThreadId(pageable, threadId));
+            message = messageService.getRandomMessageByThreadId(pageable, threadId);
         else if (boardId != null)
-            return ResponseEntity.ok(messageService.getRandomMessageByBoardId(pageable, boardId));
+            message = messageService.getRandomMessageByBoardId(pageable, boardId);
         else if (themeId != null)
-            return ResponseEntity.ok(messageService.getRandomMessageByThemeId(pageable, themeId));
+            message = messageService.getRandomMessageByThemeId(pageable, themeId);
         else
-            return ResponseEntity.ok(messageService.getRandomMessage(pageable));
+            message = messageService.getRandomMessage(pageable);
 
+        return ResponseEntity.ok(
+                new MessageDTO(message, messageService.getMessagePosition(message.getId()))
+        );
+    }
+
+    @Post
+    @RequestMapping("/list")
+    @ApiOperation(
+            name = "Get messages page",
+            response = AllMessageResponseDTO.class
+    )
+    @Override
+    public ResponseEntity<List<MessageDTO>> getMessagesInList(
+            @RequestBody Integer[] messageIds
+    ) {
+        return ResponseEntity.ok(messageService.getMessagesInList(messageIds));
     }
 
     @Get

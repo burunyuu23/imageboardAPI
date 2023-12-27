@@ -40,7 +40,8 @@ public class ThreadController implements ThreadControllerAPI {
     ) {
         if (pageable.getSort() == null)
             pageable.setSort(new Sort[]{
-                    new Sort("id", Sort.SortHow.DESC)
+                    new Sort("id", Sort.SortHow.DESC),
+                    new Sort("message_table_id")
             });
         return ResponseEntity.ok(
                 new AllThreadResponseDTO(

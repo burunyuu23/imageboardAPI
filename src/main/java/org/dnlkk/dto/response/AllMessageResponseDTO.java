@@ -4,6 +4,7 @@ import com.dnlkk.repository.helper.Pageable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.dnlkk.dto.MessageDTO;
 import org.dnlkk.model.Message;
 
 import java.util.List;
@@ -13,6 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class AllMessageResponseDTO {
     private Pageable pageable;
-    private List<Message> messages;
+    private List<MessageDTO> messages;
 }
 

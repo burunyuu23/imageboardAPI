@@ -16,7 +16,7 @@ import lombok.ToString;
 public class Attachment {
     @PK
     @EqualsAndHashCode.Include
-    private int id;
+    private Integer id;
 
     @Column("msg_id")
     @ManyToOne("attachments")
@@ -32,6 +32,10 @@ public class Attachment {
 
     public Attachment(Message message, byte[] file) {
         this.message = message;
+        this.file = file;
+    }
+    public Attachment(byte[] file) {
+        this.message = new Message(null);
         this.file = file;
     }
 }

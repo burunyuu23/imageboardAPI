@@ -3,6 +3,7 @@ package org.dnlkk.service;
 import com.dnlkk.dependency_injector.annotations.AutoInject;
 import com.dnlkk.dependency_injector.annotations.components.Service;
 import com.dnlkk.repository.helper.Pageable;
+import org.dnlkk.dto.MessageDTO;
 import org.dnlkk.dto.request.MessageCreateRequestDTO;
 import org.dnlkk.model.*;
 import org.dnlkk.model.Thread;
@@ -26,10 +27,17 @@ public class MessageService {
     private AttachmentRepository attachmentRepository;
     @AutoInject
     private ReplyRepository replyRepository;
+    @AutoInject
+    private AttachmentsService attachmentService;
 
-    public Message getMessage(Integer id) {
-        return messageRepository.findById(id);
+    public Message getMessage(Integer id, Pageable pageable) {
+        return messageRepository.findById(id, pageable);
     }
+
+    public Long getMessagePosition(Integer id) {
+        return messageRepository.positionById(id);
+    }
+
     public Message getRandomMessage(Pageable pageable) {
         return messageRepository.find(pageable);
     }
@@ -50,8 +58,6 @@ public class MessageService {
     }
 
     public Message postNewMessage(MessageCreateRequestDTO messageCreateRequestDTO) {
-        List<Attachment> attachments = new ArrayList<>();
-
         String messageBody = messageCreateRequestDTO.getBody();
 
         Message message = new Message();
@@ -63,10 +69,8 @@ public class MessageService {
         message.setThread(thread);
         messageRepository.save(message);
 
-        for (byte[] attachment : messageCreateRequestDTO.getAttachments()) {
-            Attachment attachmentTemporary = new Attachment(message, attachment);
-            attachments.add(attachmentTemporary);
-        }
+        List<Attachment> attachments = attachmentService.getAttachments(messageCreateRequestDTO.getAttachmentIds());
+        for (Attachment attachment : attachments) attachment.setMessage(message);
         message.setAttachments(attachments);
         attachmentRepository.saveAll(message.getAttachments());
 
@@ -96,10 +100,24 @@ public class MessageService {
         return replies;
     }
 
-    public List<Message> getAllMessages(Integer threadId, Pageable pageable) {
-        if (threadId != null)
-            return messageRepository.findByThread(threadId, pageable);
-        return messageRepository.findAll(pageable);
+    public List<MessageDTO> getMessagesInList(Integer[] ids) {
+        return messageRepository.findInId(ids).stream()
+                .map(message -> new MessageDTO(message, this.getMessagePosition(message.getId())))
+                .toList();
+    }
+
+    public List<MessageDTO> getAllMessages(Integer threadId, Pageable pageable) {
+        List<MessageDTO> messageDTOList = new ArrayList<>();
+        List<Message> messages;
+        if (threadId != null) {
+            messages = messageRepository.findByThread(threadId, pageable);
+            pageable.setTotalPages((messageRepository.countByThread(threadId) - pageable.getOffset() - 1) / pageable.getLimit());
+        }
+        else messages = messageRepository.findAll(pageable);
+        for (Message message:messages)
+            messageDTOList.add(new MessageDTO(message, this.getMessagePosition(message.getId())));
+
+        return messageDTOList;
     }
 
     public void deleteMessage(Integer id) {

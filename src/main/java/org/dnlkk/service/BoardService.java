@@ -6,13 +6,19 @@ import com.dnlkk.repository.helper.Pageable;
 import org.dnlkk.model.Board;
 import org.dnlkk.repository.BoardRepository;
 
+import java.util.List;
+
 @Service
 public class BoardService {
     @AutoInject
     private BoardRepository boardRepository;
 
+    public List<Board> getBoards() {
+        return boardRepository.findAllIgnoredBannerAndThreads();
+    }
+
     public Board getBoard(String id) {
-        return boardRepository.findByIdIgnoredBannerAndThreads(id);
+        return boardRepository.findByIdIgnoredThreads(id);
     }
 
     public Board getRandomBoardByThemeId(Pageable pageable, Integer themeId) {
